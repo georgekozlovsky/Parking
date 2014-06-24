@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/WEB-INF/templates/default.xhtml">
+	<ui:define name="content">
+		<h1>Welcome to JBoss AS 7!</h1>
+
+		<p>You have successfully deployed a Java EE 6 web application on
+			JBoss AS 7.</p>
+
+		<h:form>
+			<h:panelGrid>
+				<h:outputLabel id="firstNameLabel" for="firstName"
+					value="#{msg['booking_firstName']}" />
+				<h:inputText id="firstName" value="#{newBooking.firstName}" />
+				<h:message for="firstName" errorClass="invalid" />
+
+				<h:outputLabel id="lastNameLabel" for="lastName"
+					value="#{msg['booking_lastName']}" />
+				<h:inputText id="lastName" value="#{newBooking.lastName}" />
+				<h:message for="lastName" errorClass="invalid" />
+
+
+				<h:outputLabel id="emailLabel" for="email"
+					value="#{msg['booking_email']}" />
+				<h:inputText id="email" value="#{newBooking.email}" />
+				<h:message for="email" errorClass="invalid" />
+
+				<h:outputLabel id="mobilePhoneLabel" for="mobilePhone"
+					value="#{msg['booking_mobilePhone']}" />
+				<h:inputText id="mobilePhone" value="#{newBooking.mobilePhone}" />
+				<h:message for="mobilePhone" errorClass="invalid" />
+
+				<h:outputLabel id="notifyBySmsLabel" for="notifyBySms"
+					value="#{msg['booking_notifyBySms']}" />
+				<h:selectBooleanCheckbox id="notifyBySms"
+					value="#{newBooking.notifyBySms}" />
+
+				<h:outputLabel id="dateFromLabel" for="dateFrom"
+					value="#{msg['booking_dateFrom']}" />
+				<h:inputText id="dateFrom" value="#{newBooking.dateFrom}">
+					<f:convertDateTime pattern="#{msg['booking_datePattern']}" />
+				</h:inputText>
+				<h:message for="dateFrom" errorClass="invalid" />
+
+				<h:outputLabel id="dateToLabel" for="dateTo"
+					value="#{msg['booking_dateTo']}" />
+				<h:inputText id="dateTo" value="#{newBooking.dateTo}">
+					<f:convertDateTime pattern="#{msg['booking_datePattern']}" />
+				</h:inputText>
+				<h:message for="dateTo" errorClass="invalid" />
+			</h:panelGrid>
+
+			<h:commandButton id="register" action="#{bookingController.register}"
+				value="Register" />
+
+		</h:form>
+
+		<h2>Bookings</h2>
+		<h:panelGroup rendered="#{empty bookings}">
+			<em>No registered members.</em>
+		</h:panelGroup>
+		<h:dataTable var="_member" value="#{bookings}"
+			rendered="#{not empty bookings}">
+			<h:column>
+				<f:facet name="header">Id</f:facet>
+                #{_member.id}
+            </h:column>
+			<h:column>
+				<f:facet name="header">Name</f:facet>
+                #{_member.firstName} #{_member.lastName}
+            </h:column>
+			<h:column>
+				<f:facet name="header">Email</f:facet>
+                #{_member.email}
+            </h:column>
+			<h:column>
+				<f:facet name="header">Phone #</f:facet>
+                #{_member.mobilePhone}
+            </h:column>
+			<h:column>
+				<f:facet name="header">REST URL</f:facet>
+				<a href="#{request.contextPath}/rest/members/#{_member.id}">/rest/members/#{_member.id}</a>
+			</h:column>
+			<f:facet name="footer">
+                REST URL for all members: <a
+					href="#{request.contextPath}/rest/members">/rest/members</a>
+			</f:facet>
+		</h:dataTable>
+
+	</ui:define>
+</ui:composition>
